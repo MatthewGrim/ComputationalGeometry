@@ -14,17 +14,60 @@ template<int DIM>
 class Polyline
 {
 public:
+	// Constructors
+	Polyline();
+
 	Polyline(
 		const std::vector<Point<DIM> >& polyLine);
 
-	// addSegment(
-	// 	const Point<DIM>& newPoint);
+	// Limits
+	double
+	xMin() const;
 
-	// yMax() const;
-	// yMin() const;
-	// xMax() const;
-	// xMin() const;
+	double
+	xMax() const;
+
+	template<int D = DIM, typename = typename std::enable_if<(D >= 2)>::type >
+	double
+	yMin() const
+	{
+		return mLims[2];
+	}
+
+	template<int D = DIM, typename = typename std::enable_if<(D >= 2)>::type >
+	double
+	yMax() const
+	{
+		return mLims[3];
+	}
+
+	template<int D = DIM, typename = typename std::enable_if<(D == 3)>::type >
+	double
+	zMin() const
+	{
+		return mLims[4];
+	}
+
+	template<int D = DIM, typename = typename std::enable_if<(D == 3)>::type >
+	double
+	zMax() const
+	{
+		return mLims[5];
+	}
+
+	// Internal Point Functions
+	std::vector<Point<DIM> >
+	getPoints() const;
+
+	void
+	addSegment(
+		const Point<DIM>& newPoint);
+
+	// Operators
+	Point<DIM>
+	operator[] (const int& i) const;
+
 private:
-	std::vector<Point<DIM> > internalPoints;
-	std::array<double, 2 * DIM> Lim;
+	std::vector<Point<DIM> > mInternalPoints;
+	std::array<double, 2 * DIM> mLims;
 };
