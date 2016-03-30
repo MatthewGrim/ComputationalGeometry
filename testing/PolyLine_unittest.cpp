@@ -3,8 +3,8 @@ This test file is used to verify that the class Polyline is working appropriatel
 */
 
 #include "gtest/gtest.h"
-#include "Polyline.h"
-#include "Point.h"
+#include "../data/Polyline.h"
+#include "../data/Point.h"
 
 namespace compGeom {
 
@@ -67,7 +67,7 @@ TEST_F(PolylineTest, addSegments) {
 
 	std::vector<Point<3> > threeDPoints = threeDPolyline.getPoints();
 
-	for (int i = 0; i != threeDPoints.size(); ++i) {
+	for (unsigned int i = 0; i != threeDPoints.size(); ++i) {
 		EXPECT_EQ(threeDPolyline[i].x(), threeDPoints[i].x());
 		EXPECT_EQ(threeDPolyline[i].y(), threeDPoints[i].y());
 		EXPECT_EQ(threeDPolyline[i].z(), threeDPoints[i].z());

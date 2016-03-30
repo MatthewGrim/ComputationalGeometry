@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "Vector.h"
+#include "../data/Vector.h"
 
 namespace compGeom {
 	

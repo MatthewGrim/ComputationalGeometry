@@ -7,7 +7,7 @@ template<int DIM>
 Polyline<DIM>::
 Polyline() 
 {
-	for (int i = 0; i != mLims.size(); ++i) {
+	for (unsigned int i = 0; i != mLims.size(); ++i) {
 		mLims[i] = 0.0;
 	}
 }
@@ -18,7 +18,7 @@ Polyline(
 	const std::vector<Point<1> >& points)
 {
 	mInternalPoints = points;
-	for (int i = 0; i != mLims.size(); ++i) {
+	for (unsigned int i = 0; i != mLims.size(); ++i) {
 		mLims[i] = mInternalPoints[0][i/2];
 	}
 	for (auto point : mInternalPoints) {
@@ -33,7 +33,7 @@ Polyline(
 	const std::vector<Point<2> >& points)
 {
 	mInternalPoints = points;
-	for (int i = 0; i != mLims.size(); ++i) {
+	for (unsigned int i = 0; i != mLims.size(); ++i) {
 		mLims[i] = mInternalPoints[0][i/2];
 	}
 	for (auto point : mInternalPoints) {
@@ -50,7 +50,7 @@ Polyline(
 	const std::vector<Point<3> >& points)
 {
 	mInternalPoints = points;
-	for (int i = 0; i != mLims.size(); ++i) {
+	for (unsigned int i = 0; i != mLims.size(); ++i) {
 		mLims[i] = mInternalPoints[0][i/2];
 	}
 	for (auto point : mInternalPoints) {
@@ -94,12 +94,12 @@ addSegment(
 	const Point<DIM>& newPoint) 
 {
 	if (mInternalPoints.empty()) {
-		for (int i = 0; i != mLims.size(); ++i) {
+		for (unsigned int i = 0; i != mLims.size(); ++i) {
 			mLims[i] = newPoint[i/2];
 		}
 	}
 	else {
-		for (int i = 0; i != mLims.size()/2; ++i) {
+		for (unsigned int i = 0; i != mLims.size()/2; ++i) {
 			if (newPoint[i] < mLims[2 * i]) { mLims[2 * i] = newPoint[i]; }
 			if (newPoint[i] > mLims[2 * i + 1]) { mLims[2 * i + 1] = newPoint[i]; }
 		}
@@ -110,12 +110,9 @@ addSegment(
 template<int DIM>
 Point<DIM>
 Polyline<DIM>::
-operator[] (const int& i) const
+operator[] (const unsigned int& i) const
 {
-	if (i < 0) {
-		throw std::domain_error("Negative indices are not accepted");
-	}
-	else if (i > mInternalPoints.size() - 1) {
+	if (i > mInternalPoints.size() - 1) {
 		throw std::domain_error("Invalid index - larger than the size of this polyline");
 	}
 	else {

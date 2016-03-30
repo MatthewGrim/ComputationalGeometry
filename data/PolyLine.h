@@ -65,7 +65,7 @@ public:
 
 	// Operators
 	Point<DIM>
-	operator[] (const int& i) const;
+	operator[] (const unsigned int& i) const;
 
 private:
 	std::vector<Point<DIM> > mInternalPoints;

@@ -1,6 +1,6 @@
 #include "GeometryOps_2.h"
-#include "Vector.h"
-#include "Point.h"
+#include "../data/Vector.h"
+#include "../data/Point.h"
 
 #include <iostream>
 #include <vector>

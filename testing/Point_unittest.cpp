@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "Point.h"
-#include "Vector.h"
+#include "../data/Point.h"
+#include "../data/Vector.h"
 
 namespace compGeom {
 
