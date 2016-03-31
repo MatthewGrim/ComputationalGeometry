@@ -1,3 +1,8 @@
+/*
+Author: Rohan Ramasamy
+Data: 31/03/16
+*/
+
 #include "GeometryOps_2.h"
 #include "../data/Vector.h"
 #include "../data/Point.h"

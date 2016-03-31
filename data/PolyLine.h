@@ -1,5 +1,8 @@
-/**
-This class is used to model a series of connected line segments - a Polyline, which can be
+/*
+Author: Rohan Ramasamy
+Data: 31/03/16
+
+Comments: This class is used to model a series of connected line segments - a Polyline, which can be
 used to approximate more complicated geometries
 */
 #pragma once
@@ -7,8 +10,7 @@ used to approximate more complicated geometries
 #include <array>
 #include <vector>
 
-template<int DIM>
-class Point;
+#include "Point_fwd.h"
 
 template<int DIM>
 class Polyline

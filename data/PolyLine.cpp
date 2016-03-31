@@ -1,3 +1,8 @@
+/*
+Author: Rohan Ramasamy
+Data: 31/03/16
+*/
+
 #include "Polyline.h"
 #include "Point.h"
 

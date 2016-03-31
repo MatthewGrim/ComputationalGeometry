@@ -1,7 +1,13 @@
+/*
+Author: Rohan Ramasamy
+Data: 31/03/16
+
+Comments: This class is used to represent vectors in 1-3 dimenstions.
+*/
+
 #include <array>
 
-template<int DIM>
-class Point;
+#include "Point_fwd.h"
 
 template<int DIM>
 class Vector

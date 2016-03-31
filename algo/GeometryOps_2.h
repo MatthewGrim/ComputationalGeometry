@@ -1,16 +1,17 @@
-/* 
-Class used to perform geometric operations on the fundamental geometric
+/*
+Author: Rohan Ramasamy
+Data: 31/03/16
+
+Comments: Class used to perform geometric operations on the fundamental geometric
 data structures
 */
 #pragma once
 
 #include <vector>
 
-template<int DIM>
-class Vector;
+#include "../data/Vector_fwd.h"
+#include "../data/Point_fwd.h"
 
-template<int DIM>
-class Point;
 
 class GeometryOps_2
 {

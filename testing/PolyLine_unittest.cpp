@@ -1,5 +1,6 @@
-/**
-This test file is used to verify that the class Polyline is working appropriately
+/*
+Author: Rohan Ramasamy
+Data: 31/03/16
 */
 
 #include "gtest/gtest.h"

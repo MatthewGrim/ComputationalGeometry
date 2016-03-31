@@ -1,5 +1,8 @@
 /*
-This class is designed to represent a point in 1, 2 or 3 dimensions. It should be 
+Author: Rohan Ramasamy
+Data: 31/03/16
+
+Comments: This class is designed to represent a point in 1, 2 or 3 dimensions. It should be 
 able to interact with the vector class in the typical ways for geometric function
 */
 
@@ -7,8 +10,7 @@ able to interact with the vector class in the typical ways for geometric functio
 
 #include <array>
 
-template<int DIM>
-class Vector;
+#include "Vector_fwd.h"
 
 template <int DIM>
 class Point

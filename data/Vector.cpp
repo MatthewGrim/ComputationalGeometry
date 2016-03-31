@@ -1,3 +1,8 @@
+/*
+Author: Rohan Ramasamy
+Data: 31/03/16
+*/
+
 #include "Vector.h"
 #include "Point.h"
 
