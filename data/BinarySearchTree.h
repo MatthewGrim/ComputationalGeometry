@@ -27,36 +27,36 @@ public:
 	}
 
 	key
-	getKey() { return mKey.first; }
+	getKey() const { return mKey.first; }
 
 	std::vector<data>
-	getData() { return mKey.second; }
+	getData() const { return mKey.second; }
 
-	Node*
+	Node*&
 	right() { 
 		return mRight;
 	}
 
-	Node*
+	Node*&
 	left() { 
 		return mLeft;
 	}
 
 	void
-	setRight(Node* newPtr) {
-		mRight = newPtr;
+	setRight(const Node& newNode) {
+		mRight = new Node(newNode);
 	}
 
 	void
-	setLeft(Node* newPtr) {
-		mLeft = newPtr;
+	setLeft(const Node& newNode) {
+		mLeft = new Node(newNode);
 	}
 
 	void
-	addData(data newData) { mKey.second.push_back(newData); }
+	addData(const data& newData) { mKey.second.push_back(newData); }
 
 	void
-	addData(std::vector<data> newDataVector) {
+	addData(const std::vector<data>& newDataVector) {
 		for (auto newData : newDataVector) {
 			mKey.second.push_back(newData);
 		}
@@ -75,7 +75,8 @@ class BinarySearchTree {
 public:
 	BinarySearchTree() : mRoot(nullptr) {}
 
-	BinarySearchTree(key rootKey, data rootData) {
+	BinarySearchTree(const key& rootKey,
+		             const data& rootData) {
 		mRoot = new Node(rootKey, rootData);
 	}
 
@@ -84,9 +85,9 @@ public:
 	}
 
 	void
-	insert(Node& newNode) {
+	insert(const Node& newNode) {
 		if (mRoot == NULL) {
-			mRoot = &newNode; 
+			mRoot = new Node(newNode); 
 		}
 		else if (mRoot->getKey() > newNode.getKey()) {
 			insert(mRoot->left(), newNode);
@@ -100,45 +101,93 @@ public:
 	}
 
 	void
-	insert(Node* parentNode,
-		   Node& newNode) {
-		if (parentNode == NULL) {
-		    parentNode = &newNode; 
-		}
+	insert(Node*& parentNode,
+		   const Node& newNode) {
+		if (parentNode == NULL) { parentNode = new Node(newNode); }
 		else if (parentNode->getKey() > newNode.getKey()) {
 			insert(parentNode->left(), newNode);
 		}
-		else if (parentNode->getKey() < newNode.getKey()) {
-			insert(parentNode->right(), newNode);
+		else if (parentNode->getKey() < newNode.getKey()) { 
+			insert(parentNode->right(), newNode); 
 		}
-		else {
-			parentNode->addData(newNode.getData());
-		}
+		else { parentNode->addData(newNode.getData()); }
 	}
 
 	bool
-	search(key searchKey) {
+	search(const key& searchKey) const {
 		if (mRoot == NULL) { return false; }
-		else if (mRoot->getKey() > searchKey) { search(mRoot->left(), searchKey); }
-		else if (mRoot->getKey() < searchKey) { search(mRoot->right(), searchKey); }
+		else if (mRoot->getKey() > searchKey) {return search(mRoot->left(), searchKey); }
+		else if (mRoot->getKey() < searchKey) {return search(mRoot->right(), searchKey); }
 		else { return true; }
 	}
 
 	bool
 	search(Node* node,
-		   key searchKey) {
+		   const key& searchKey) const {
 		if (node == NULL) { return false; }
-		else if (node->getKey() > searchKey) { search(node->left(), searchKey); }
-		else if (node->getKey() < searchKey) { search(node->right(), searchKey); }
+		else if (node->getKey() > searchKey) { return search(node->left(), searchKey); }
+		else if (node->getKey() < searchKey) { return search(node->right(), searchKey); }
 		else { return true; }
+	}
+
+	std::vector<data>
+	find(const key& searchKey) const {
+		if (mRoot == NULL) { throw std::runtime_error("Invalid Search Key"); }
+		else if (mRoot->getKey() > searchKey) {return find(mRoot->left(), searchKey); }
+		else if (mRoot->getKey() < searchKey) {return find(mRoot->right(), searchKey); }
+		else { return mRoot->getData(); }
+	}
+
+	std::vector<data>
+	find(Node* node,
+		const key& searchKey) const {
+		if (node == NULL) { throw std::runtime_error("Invalid Search Key"); }
+		else if (node->getKey() > searchKey) {return find(node->left(), searchKey); }
+		else if (node->getKey() < searchKey) {return find(node->right(), searchKey); }
+		else { return node->getData(); }
 	}
 
 	// void
 	// insertData(key searchKey,
 	// 	       data newData);
 
-	// void
-	// delete(key searchKey);
+	void
+	deleteNode(Node*& node) {
+		if (node == NULL) { }
+		else {
+			if (node->left()) { deleteNode(node->left()); }
+			if (node->right()) { deleteNode(node->right()); }
+			delete node;
+			node = nullptr;
+		}
+	}
+
+	void
+	deleteNode(const key& searchKey) {
+		if (mRoot == NULL) { }
+		else if (mRoot->getKey() > searchKey) {deleteNode(mRoot->left(), searchKey); }
+		else if (mRoot->getKey() < searchKey) {deleteNode(mRoot->right(), searchKey); }
+		else { 
+			deleteNode(mRoot->left());
+			deleteNode(mRoot->right());
+			delete mRoot;
+			mRoot = nullptr;
+		}
+	}
+
+	void
+	deleteNode(Node*& node,
+		       const key& searchKey) {
+		if (node == NULL) { }
+		else if (node->getKey() > searchKey) {deleteNode(node->left(), searchKey); }
+		else if (node->getKey() < searchKey) {deleteNode(node->right(), searchKey); }
+		else { 
+			deleteNode(node->left());
+			deleteNode(node->right());
+			delete node;
+			node = nullptr;
+		}
+	}
 private:
 	Node* mRoot;
 };

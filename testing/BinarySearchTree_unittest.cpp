@@ -34,11 +34,8 @@ TEST_F(BinarySearchTreeTest, NodeTest) {
 	EXPECT_EQ(4.0, node1.getData().at(3));
 	EXPECT_ANY_THROW(node1.getData().at(4));
 
-	Node<int, double>* rightPtr = new Node<int, double>(3, 5.0);
-	Node<int, double>* leftPtr = new Node<int, double>(3, 5.0);
-
-	node1.setRight(rightPtr);
-	node1.setLeft(leftPtr);
+	node1.setRight(Node<int, double>(3, 5.0));
+	node1.setLeft(Node<int, double>(3, 5.0));
 
 	EXPECT_EQ(3, node1.right()->getKey());
 	EXPECT_EQ(5.0, node1.right()->getData().at(0));
@@ -67,31 +64,55 @@ TEST_F(BinarySearchTreeTest, SearchTest) {
 	Node<double, double> node1(-1.0, 5.0);
 	Node<double, double> node2(-2.0, 4.0);
 	Node<double, double> node3(2.0, 2.0);
+	Node<double, double> node4(2.0, 4.0);
+	Node<double, double> node5(3.0, 5.0);
 
 	bST.insert(node1);
 	bST.insert(node2);
 	bST.insert(node3);
+	bST.insert(node4);
+	bST.insert(node5);
 
 	EXPECT_TRUE(bST.search(-1.0));
+	EXPECT_TRUE(bST.search(-2.0));
+	EXPECT_TRUE(bST.search(2.0));
+	EXPECT_TRUE(bST.search(3.0));
 	EXPECT_FALSE(bST.search(6.0));
 
-	// EXPECT_EQ(2.0, bST.find(2.0));
+	EXPECT_EQ(5.0, bST.find(-1.0).at(0));
+	EXPECT_EQ(4.0, bST.find(-2.0).at(0));
+	EXPECT_EQ(2.0, bST.find(2.0).at(0));
+	EXPECT_EQ(4.0, bST.find(2.0).at(1));
+	EXPECT_EQ(5.0, bST.find(3.0).at(0));
+	EXPECT_ANY_THROW(bST.find(3.0).at(1));
+	EXPECT_ANY_THROW(bST.find(6.0));
 }
 
-// TEST_F(BinarySearchTreeTest, DeletionTest) {
-// 	BinarySearchTree<int, int> bST();
+TEST_F(BinarySearchTreeTest, DeletionTest) {
+	BinarySearchTree<double, double> bST;
 
-// 	bST.insert(std::pair<int, int>(5, 3));
-// 	bST.insert(1);
-// 	bST.insert(4);
+	Node<double, double> node1(-1.0, 5.0);
+	Node<double, double> node2(-2.0, 4.0);
+	Node<double, double> node3(2.0, 2.0);
+	Node<double, double> node4(2.0, 4.0);
+	Node<double, double> node5(3.0, 5.0);
 
-// 	EXPECT_TRUE(bST.search(5));
+	bST.insert(node1);
+	bST.insert(node2);
+	bST.insert(node3);
+	bST.insert(node4);
+	bST.insert(node5);
 
-// 	bST.delete(5);
+	EXPECT_TRUE(bST.search(-2.0));
+	bST.deleteNode(-2.0);
+	EXPECT_FALSE(bST.search(-2.0));
 
-// 	EXPECT_FALSE(bST.search(5));
+	EXPECT_TRUE(bST.search(2.0));
+	bST.deleteNode(2.0);
+	EXPECT_FALSE(bST.search(2.0));
+	EXPECT_FALSE(bST.search(3.0));
 
-// 	EXPECT_ANY_THROW(bST.delete(5));
-// }
+	// EXPECT_ANY_THROW(bST.deleteNode(5.0));
+}
 
 }
