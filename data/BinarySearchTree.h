@@ -23,41 +23,70 @@ namespace {
 template<class key, class data>
 class Node {
 public:
+	// Constructors
 	Node(key keyValue,
 		data dataValue) : mRight(nullptr), mLeft(nullptr) {
 		std::vector<data> tmpData = { dataValue };
 		mKey = std::pair<key, std::vector<data> >(keyValue, tmpData);
 	}
 
+	/*
+	@description: return the key of the node.
+	*/
 	key
 	getKey() const { return mKey.first; }
 
+	/*
+	@description: return the data within the node.
+	*/
 	std::vector<data>
 	getData() const { return mKey.second; }
 
-	Node*&
+	/*
+	@description: return a pointer to the node to the right of the current node.
+	*/
+	std::shared_ptr<Node>&
 	right() { 
 		return mRight;
 	}
 
-	Node*&
+	/*
+	@description: return a pointer to the node to the left of the curent node..
+	*/
+	std::shared_ptr<Node>&
 	left() { 
 		return mLeft;
 	}
 
+	/*
+	@description: set the right child node of the current node.
+	@param newNode: node values to be assigned to the new node.
+	*/
 	void
 	setRight(const Node& newNode) {
-		mRight = new Node(newNode);
+		mRight = std::make_shared<Node>(newNode);
 	}
 
+	/*
+	@description: set the left child node of the current node.
+	@param newNode: node values to be assigned to the new node.
+	*/
 	void
 	setLeft(const Node& newNode) {
-		mLeft = new Node(newNode);
+		mLeft = std::make_shared<Node>(newNode);
 	}
 
+	/*
+	@description: add data to the current node.
+	@param newData: data to be added to the node.
+	*/
 	void
 	addData(const data& newData) { mKey.second.push_back(newData); }
 
+	/*
+	@description: add vector of data to the current node.
+	@param newData: vector of data to be added to current node.
+	*/
 	void
 	addData(const std::vector<data>& newDataVector) {
 		for (auto newData : newDataVector) {
@@ -66,8 +95,8 @@ public:
 	}
 private:
 	std::pair<key, std::vector<data> > mKey;
-	Node* mRight;
-	Node* mLeft;
+	std::shared_ptr<Node> mRight;
+	std::shared_ptr<Node> mLeft;
 };
 
 }
@@ -81,11 +110,11 @@ public:
 
 	BinarySearchTree(const key& rootKey,
 		             const data& rootData) {
-		mRoot = new Node(rootKey, rootData);
+		mRoot = std::shared_ptr<Node>(rootKey, rootData);
 	}
 
 	BinarySearchTree(Node rootNode) {
-		mRoot = &rootNode;
+		mRoot = std::make_shared<Node>(rootNode);
 	}
 
 	/*
@@ -95,7 +124,7 @@ public:
 	void
 	insertNode(const Node& newNode) {
 		if (mRoot == NULL) {
-			mRoot = new Node(newNode); 
+			mRoot = std::make_shared<Node>(newNode); 
 		}
 		else if (mRoot->getKey() > newNode.getKey()) {
 			insertNode(mRoot->left(), newNode);
@@ -173,22 +202,21 @@ public:
 		else { 
 			deleteNode(mRoot->left());
 			deleteNode(mRoot->right());
-			delete mRoot;
-			mRoot = nullptr;
+			mRoot.reset();
 		}
 	}
 
 private:
-	Node* mRoot;
+	std::shared_ptr<Node> mRoot;
 	
 	/*
 	Private implementations of API functions that are used to act on children nodes within
 	the data hierarchy of the binary search tree.
 	*/
 	void
-	insertNode(Node*& parentNode,
+	insertNode(std::shared_ptr<Node>& parentNode,
 		   const Node& newNode) {
-		if (parentNode == NULL) { parentNode = new Node(newNode); }
+		if (parentNode == NULL) { parentNode = std::make_shared<Node>(newNode); }
 		else if (parentNode->getKey() > newNode.getKey()) {
 			insertNode(parentNode->left(), newNode);
 		}
@@ -199,7 +227,7 @@ private:
 	}
 
 	bool
-	search(Node* node,
+	search(std::shared_ptr<Node> node,
 		   const key& searchKey) const {
 		if (node == NULL) { return false; }
 		else if (node->getKey() > searchKey) { return search(node->left(), searchKey); }
@@ -208,7 +236,7 @@ private:
 	}
 
 	std::vector<data>
-	find(Node* node,
+	find(std::shared_ptr<Node> node,
 		const key& searchKey) const {
 		if (node == NULL) { throw std::runtime_error("Invalid Search Key"); }
 		else if (node->getKey() > searchKey) {return find(node->left(), searchKey); }
@@ -217,7 +245,7 @@ private:
 	}
 
 	void
-	insertData(Node* node,
+	insertData(std::shared_ptr<Node> node,
 			   const key& searchKey,
 		       const data& newData) {
 		if (node == NULL) { throw std::runtime_error("Invalid Search Key"); }
@@ -227,7 +255,7 @@ private:
 	}
 
 	void
-	insertData(Node* node,
+	insertData(std::shared_ptr<Node> node,
 			   const key& searchKey,
 		       const std::vector<data>& newData) {
 		if (node == NULL) { throw std::runtime_error("Invalid Search Key"); }
@@ -237,7 +265,7 @@ private:
 	}
 
 	void
-	deleteNode(Node*& node,
+	deleteNode(std::shared_ptr<Node>& node,
 		       const key& searchKey) {
 		if (node == NULL) { }
 		else if (node->getKey() > searchKey) {deleteNode(node->left(), searchKey); }
@@ -245,19 +273,17 @@ private:
 		else { 
 			deleteNode(node->left());
 			deleteNode(node->right());
-			delete node;
-			node = nullptr;
+			node.reset();
 		}
 	}
 
 	void
-	deleteNode(Node*& node) {
+	deleteNode(std::shared_ptr<Node>& node) {
 		if (node == NULL) { }
 		else {
 			if (node->left()) { deleteNode(node->left()); }
 			if (node->right()) { deleteNode(node->right()); }
-			delete node;
-			node = nullptr;
+			node.reset();
 		}
 	}
 };
