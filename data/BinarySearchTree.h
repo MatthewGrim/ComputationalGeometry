@@ -85,15 +85,15 @@ public:
 	}
 
 	void
-	insert(const Node& newNode) {
+	insertNode(const Node& newNode) {
 		if (mRoot == NULL) {
 			mRoot = new Node(newNode); 
 		}
 		else if (mRoot->getKey() > newNode.getKey()) {
-			insert(mRoot->left(), newNode);
+			insertNode(mRoot->left(), newNode);
 		}
 		else if (mRoot->getKey() < newNode.getKey()) {
-			insert(mRoot->right(), newNode);
+			insertNode(mRoot->right(), newNode);
 		}
 		else {
 			mRoot->addData(newNode.getData());
@@ -101,14 +101,14 @@ public:
 	}
 
 	void
-	insert(Node*& parentNode,
+	insertNode(Node*& parentNode,
 		   const Node& newNode) {
 		if (parentNode == NULL) { parentNode = new Node(newNode); }
 		else if (parentNode->getKey() > newNode.getKey()) {
-			insert(parentNode->left(), newNode);
+			insertNode(parentNode->left(), newNode);
 		}
 		else if (parentNode->getKey() < newNode.getKey()) { 
-			insert(parentNode->right(), newNode); 
+			insertNode(parentNode->right(), newNode); 
 		}
 		else { parentNode->addData(newNode.getData()); }
 	}
@@ -147,9 +147,43 @@ public:
 		else { return node->getData(); }
 	}
 
-	// void
-	// insertData(key searchKey,
-	// 	       data newData);
+	void
+	insertData(const key& searchKey,
+		       const data& newData) {
+		if (mRoot == NULL) { throw std::runtime_error("Invalid Search Key"); }
+		else if (mRoot->getKey() > searchKey) {return insertData(mRoot->left(), searchKey, newData); }
+		else if (mRoot->getKey() < searchKey) {return insertData(mRoot->right(), searchKey, newData); }
+		else { return mRoot->addData(newData); }
+	}
+
+	void
+	insertData(Node* node,
+			   const key& searchKey,
+		       const data& newData) {
+		if (node == NULL) { throw std::runtime_error("Invalid Search Key"); }
+		else if (node->getKey() > searchKey) {return insertData(node->left(), searchKey, newData); }
+		else if (node->getKey() < searchKey) {return insertData(node->right(), searchKey, newData); }
+		else { return node->addData(newData); }
+	}
+
+	void
+	insertData(const key& searchKey,
+		       const std::vector<data>& newData) {
+		if (mRoot == NULL) { throw std::runtime_error("Invalid Search Key"); }
+		else if (mRoot->getKey() > searchKey) {return insertData(mRoot->left(), searchKey, newData); }
+		else if (mRoot->getKey() < searchKey) {return insertData(mRoot->right(), searchKey, newData); }
+		else { return mRoot->addData(newData); }
+	}
+
+	void
+	insertData(Node* node,
+			   const key& searchKey,
+		       const std::vector<data>& newData) {
+		if (node == NULL) { throw std::runtime_error("Invalid Search Key"); }
+		else if (node->getKey() > searchKey) {return insertData(node->left(), searchKey, newData); }
+		else if (node->getKey() < searchKey) {return insertData(node->right(), searchKey, newData); }
+		else { return node->addData(newData); }
+	}
 
 	void
 	deleteNode(Node*& node) {

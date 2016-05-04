@@ -51,11 +51,16 @@ TEST_F(BinarySearchTreeTest, InsertionTest) {
 	Node<double, double> node3(2.0, 2.0);
 	Node<double, double> node4(5.0, 5.0);
 
-	EXPECT_NO_THROW(bST.insert(node1));
-	EXPECT_NO_THROW(bST.insert(node2));
-	EXPECT_NO_THROW(bST.insert(node3));
-	EXPECT_NO_THROW(bST.insert(node4));
-	EXPECT_NO_THROW(bST.insert(node4));
+	EXPECT_NO_THROW(bST.insertNode(node1));
+	EXPECT_NO_THROW(bST.insertNode(node2));
+	EXPECT_NO_THROW(bST.insertNode(node3));
+	EXPECT_NO_THROW(bST.insertNode(node4));
+	EXPECT_NO_THROW(bST.insertNode(node4));
+
+	EXPECT_NO_THROW(bST.insertData(-1.0, 6.0));
+	std::vector<double> newData = {3.0, 5.0};
+	EXPECT_NO_THROW(bST.insertData(2.0, newData));
+	EXPECT_ANY_THROW(bST.insertData(6.0, 2.0));
 }
 
 TEST_F(BinarySearchTreeTest, SearchTest) {
@@ -67,11 +72,11 @@ TEST_F(BinarySearchTreeTest, SearchTest) {
 	Node<double, double> node4(2.0, 4.0);
 	Node<double, double> node5(3.0, 5.0);
 
-	bST.insert(node1);
-	bST.insert(node2);
-	bST.insert(node3);
-	bST.insert(node4);
-	bST.insert(node5);
+	bST.insertNode(node1);
+	bST.insertNode(node2);
+	bST.insertNode(node3);
+	bST.insertNode(node4);
+	bST.insertNode(node5);
 
 	EXPECT_TRUE(bST.search(-1.0));
 	EXPECT_TRUE(bST.search(-2.0));
@@ -97,11 +102,11 @@ TEST_F(BinarySearchTreeTest, DeletionTest) {
 	Node<double, double> node4(2.0, 4.0);
 	Node<double, double> node5(3.0, 5.0);
 
-	bST.insert(node1);
-	bST.insert(node2);
-	bST.insert(node3);
-	bST.insert(node4);
-	bST.insert(node5);
+	bST.insertNode(node1);
+	bST.insertNode(node2);
+	bST.insertNode(node3);
+	bST.insertNode(node4);
+	bST.insertNode(node5);
 
 	EXPECT_TRUE(bST.search(-2.0));
 	bST.deleteNode(-2.0);
@@ -111,8 +116,6 @@ TEST_F(BinarySearchTreeTest, DeletionTest) {
 	bST.deleteNode(2.0);
 	EXPECT_FALSE(bST.search(2.0));
 	EXPECT_FALSE(bST.search(3.0));
-
-	// EXPECT_ANY_THROW(bST.deleteNode(5.0));
 }
 
 }
