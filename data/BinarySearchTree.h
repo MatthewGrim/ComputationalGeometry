@@ -24,6 +24,8 @@ template<class key, class data>
 class Node {
 public:
 	// Constructors
+	Node() { };
+
 	Node(key keyValue,
 		data dataValue) : mRight(nullptr), mLeft(nullptr) {
 		std::vector<data> tmpData = { dataValue };

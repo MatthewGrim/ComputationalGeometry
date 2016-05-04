@@ -13,44 +13,64 @@ This file contains unit tests for BinarySearchTree
 
 namespace compGeom {
 
-class BinarySearchTreeTest : public ::testing::Test {};
+class BinarySearchTreeTest : public ::testing::Test {
+public:
+	BinarySearchTree<double, double> bST;
+
+	Node<double, double> node1;
+	Node<double, double> node2;
+	Node<double, double> node3;
+	Node<double, double> node4;
+	Node<double, double> node5;
+
+	virtual void SetUp() {
+		node1 = Node<double, double>(-1.0, 5.0);
+		node2 = Node<double, double>(-2.0, 4.0);
+		node3 = Node<double, double>(2.0, 2.0);
+		node4 = Node<double, double>(2.0, 4.0);
+		node5 = Node<double, double>(3.0, 5.0);
+
+		bST.insertNode(node1);
+		bST.insertNode(node2);
+		bST.insertNode(node3);
+		bST.insertNode(node4);
+		bST.insertNode(node5);
+	}
+
+	virtual void TearDown() {
+
+	}
+};
 
 TEST_F(BinarySearchTreeTest, NodeTest) {
-	Node<int, double> node1(1, 3.0);
+	Node<int, double> testNode(1, 3.0);
 
-	EXPECT_EQ(1, node1.getKey());
-	EXPECT_EQ(3.0, node1.getData().at(0));
+	EXPECT_EQ(1, testNode.getKey());
+	EXPECT_EQ(3.0, testNode.getData().at(0));
 
-	node1.addData(2.0);
-	EXPECT_EQ(3.0, node1.getData().at(0));
-	EXPECT_EQ(2.0, node1.getData().at(1));
-	EXPECT_ANY_THROW(node1.getData().at(2));
+	testNode.addData(2.0);
+	EXPECT_EQ(3.0, testNode.getData().at(0));
+	EXPECT_EQ(2.0, testNode.getData().at(1));
+	EXPECT_ANY_THROW(testNode.getData().at(2));
 
 	std::vector<double> dataVector = { 3.0, 4.0 };
-	node1.addData(dataVector);
-	EXPECT_EQ(3.0, node1.getData().at(0));
-	EXPECT_EQ(2.0, node1.getData().at(1));
-	EXPECT_EQ(3.0, node1.getData().at(2));
-	EXPECT_EQ(4.0, node1.getData().at(3));
-	EXPECT_ANY_THROW(node1.getData().at(4));
+	testNode.addData(dataVector);
+	EXPECT_EQ(3.0, testNode.getData().at(0));
+	EXPECT_EQ(2.0, testNode.getData().at(1));
+	EXPECT_EQ(3.0, testNode.getData().at(2));
+	EXPECT_EQ(4.0, testNode.getData().at(3));
+	EXPECT_ANY_THROW(testNode.getData().at(4));
 
-	node1.setRight(Node<int, double>(3, 5.0));
-	node1.setLeft(Node<int, double>(3, 5.0));
+	testNode.setRight(Node<int, double>(3, 5.0));
+	testNode.setLeft(Node<int, double>(3, 5.0));
 
-	EXPECT_EQ(3, node1.right()->getKey());
-	EXPECT_EQ(5.0, node1.right()->getData().at(0));
-	EXPECT_EQ(3, node1.left()->getKey());
-	EXPECT_EQ(5.0, node1.left()->getData().at(0));
+	EXPECT_EQ(3, testNode.right()->getKey());
+	EXPECT_EQ(5.0, testNode.right()->getData().at(0));
+	EXPECT_EQ(3, testNode.left()->getKey());
+	EXPECT_EQ(5.0, testNode.left()->getData().at(0));
 }
 
 TEST_F(BinarySearchTreeTest, InsertionTest) {
-	BinarySearchTree<double, double> bST(Node<double, double>(1.0, 5.0));
-
-	Node<double, double> node1(-1.0, 5.0);
-	Node<double, double> node2(-2.0, 4.0);
-	Node<double, double> node3(2.0, 2.0);
-	Node<double, double> node4(5.0, 5.0);
-
 	EXPECT_NO_THROW(bST.insertNode(node1));
 	EXPECT_NO_THROW(bST.insertNode(node2));
 	EXPECT_NO_THROW(bST.insertNode(node3));
@@ -64,20 +84,6 @@ TEST_F(BinarySearchTreeTest, InsertionTest) {
 }
 
 TEST_F(BinarySearchTreeTest, SearchTest) {
-	BinarySearchTree<double, double> bST;
-
-	Node<double, double> node1(-1.0, 5.0);
-	Node<double, double> node2(-2.0, 4.0);
-	Node<double, double> node3(2.0, 2.0);
-	Node<double, double> node4(2.0, 4.0);
-	Node<double, double> node5(3.0, 5.0);
-
-	bST.insertNode(node1);
-	bST.insertNode(node2);
-	bST.insertNode(node3);
-	bST.insertNode(node4);
-	bST.insertNode(node5);
-
 	EXPECT_TRUE(bST.search(-1.0));
 	EXPECT_TRUE(bST.search(-2.0));
 	EXPECT_TRUE(bST.search(2.0));
@@ -94,20 +100,6 @@ TEST_F(BinarySearchTreeTest, SearchTest) {
 }
 
 TEST_F(BinarySearchTreeTest, DeletionTest) {
-	BinarySearchTree<double, double> bST;
-
-	Node<double, double> node1(-1.0, 5.0);
-	Node<double, double> node2(-2.0, 4.0);
-	Node<double, double> node3(2.0, 2.0);
-	Node<double, double> node4(2.0, 4.0);
-	Node<double, double> node5(3.0, 5.0);
-
-	bST.insertNode(node1);
-	bST.insertNode(node2);
-	bST.insertNode(node3);
-	bST.insertNode(node4);
-	bST.insertNode(node5);
-
 	EXPECT_TRUE(bST.search(-2.0));
 	bST.deleteNode(-2.0);
 	EXPECT_FALSE(bST.search(-2.0));
