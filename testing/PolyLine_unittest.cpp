@@ -4,6 +4,7 @@ Data: 31/03/16
 */
 
 #include "gtest/gtest.h"
+
 #include "../data/Polyline.h"
 #include "../data/Point.h"
 

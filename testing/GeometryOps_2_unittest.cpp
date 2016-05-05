@@ -24,17 +24,32 @@ TEST_F(GeometryOps_2Test, conversion2Dto3D)
 }
 
 
-TEST_F(GeometryOps_2Test, compare) 
+TEST_F(GeometryOps_2Test, compareHull) 
 {
 	Point<DIM> pointOne(1.0, 5.0);
 	Point<DIM> pointTwo(2.0, 7.0);
 	Point<DIM> pointThree(1.0, 7.0);
 
-	EXPECT_TRUE(GeometryOps_2::compare(pointOne, pointTwo));		// xOne < x
-	EXPECT_TRUE(GeometryOps_2::compare(pointOne, pointThree));		// xOne == x, yOne < y
-	EXPECT_FALSE(GeometryOps_2::compare(pointTwo, pointOne));		// Opposite
-	EXPECT_FALSE(GeometryOps_2::compare(pointThree, pointOne));		// ""
-	EXPECT_TRUE(GeometryOps_2::compare(pointOne, pointOne));		// Same Point
+	EXPECT_TRUE(GeometryOps_2::compareHull(pointOne, pointTwo));		// xOne < x
+	EXPECT_TRUE(GeometryOps_2::compareHull(pointOne, pointThree));		// xOne == x, yOne < y
+	EXPECT_FALSE(GeometryOps_2::compareHull(pointTwo, pointOne));		// Opposite
+	EXPECT_FALSE(GeometryOps_2::compareHull(pointThree, pointOne));		// ""
+	EXPECT_TRUE(GeometryOps_2::compareHull(pointOne, pointOne));		// Same Point
+}
+
+TEST_F(GeometryOps_2Test, compareInstersection) 
+{
+	Point<DIM> pointOne(1.0, 5.0);
+	Point<DIM> pointTwo(2.0, 7.0);
+	Point<DIM> pointThree(1.0, 7.0);
+
+	EXPECT_FALSE(GeometryOps_2::compareIntersection(pointOne, pointTwo));	
+	EXPECT_FALSE(GeometryOps_2::compareIntersection(pointOne, pointThree));		
+	EXPECT_TRUE(GeometryOps_2::compareIntersection(pointTwo, pointOne));		
+	EXPECT_TRUE(GeometryOps_2::compareIntersection(pointThree, pointOne));		
+	EXPECT_TRUE(GeometryOps_2::compareIntersection(pointOne, pointOne));		
+	EXPECT_FALSE(GeometryOps_2::compareIntersection(pointTwo, pointThree));
+	EXPECT_TRUE(GeometryOps_2::compareIntersection(pointThree, pointTwo));
 }
 
 TEST_F(GeometryOps_2Test, simpleConvexHull) 

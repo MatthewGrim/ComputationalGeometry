@@ -13,9 +13,6 @@ This file contains the code for a binary search tree.
 #include <cstddef>
 #include <memory>
 
-// Temporary Includes
-#include <iostream>
-
 namespace compGeom {
 
 namespace {

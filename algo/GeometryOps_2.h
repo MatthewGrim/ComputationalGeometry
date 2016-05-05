@@ -11,7 +11,10 @@ data structures
 
 #include "../data/Vector_fwd.h"
 #include "../data/Point_fwd.h"
+#include "../data/LineSegment.h"
 
+
+namespace compGeom {
 
 class GeometryOps_2
 {
@@ -25,20 +28,36 @@ public:
 	static
 	Vector<3>
 	convert2Dto3D(
-		const Vector<2>& twoDVector);
+		const Vector<DIM>& twoDVector);
 
-	// Lexicographic comparison of 2D points
+	// Lexicographic comparison of 2D points for convex hull algortithm
 	static
 	bool
-	compare(
+	compareHull(
+		const Point<DIM>& pointOne,
+		const Point<DIM>& pointTwo);
+
+	// Comparison of 2D points for line intersection algorithm - high y values are first,
+	// followed by low x values so that the first points are in the top left of the domain
+	static
+	bool
+	compareIntersection(
 		const Point<DIM>& pointOne,
 		const Point<DIM>& pointTwo);
 
 	// Find the convex hull of a set of points -
 	// Repeated Points and Points in Parallel are included
 	static
-	std::vector<Point<2> >
+	std::vector<Point<DIM> >
 	convexHull(
-		std::vector<Point<2> >& unsortedPoints);
+		std::vector<Point<DIM> >& unsortedPoints);
+
+	// Find the intersection of a set of lines
+	// static
+	// std::vector<Point<DIM> >
+	// findIntersections(
+	// 	std::vector<LineSegment<DIM> > segments);
 
 };
+
+}

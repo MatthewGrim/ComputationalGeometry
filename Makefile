@@ -7,7 +7,7 @@ CC = g++
 CFLAGS = -Wall -Wextra -std=c++11 -lgtest
 
 # build files
-TARGET = main.cpp data/Point.cpp data/Vector.cpp testing/Point_unittest.cpp testing/Vector_unittest.cpp algo/GeometryOps_2.cpp testing/GeometryOps_2_unittest.cpp data/PolyLine.cpp testing/PolyLine_unittest.cpp testing/BinarySearchTree_unittest.cpp
+TARGET = main.cpp data/Point.cpp data/Vector.cpp testing/Point_unittest.cpp testing/Vector_unittest.cpp algo/GeometryOps_2.cpp testing/GeometryOps_2_unittest.cpp data/PolyLine.cpp testing/PolyLine_unittest.cpp testing/BinarySearchTree_unittest.cpp testing/LineSegment_unittest.cpp
 
 target: $(TARGET)
 	$(CC) $(CFLAGS) $(TARGET)

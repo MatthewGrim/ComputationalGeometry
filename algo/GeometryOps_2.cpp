@@ -9,6 +9,9 @@ Data: 31/03/16
 
 #include <iostream>
 #include <vector>
+#include <set>
+
+namespace compGeom {
 
 Vector<3>
 GeometryOps_2::
@@ -21,7 +24,7 @@ convert2Dto3D(
 
 bool
 GeometryOps_2::
-compare(
+compareHull(
 	const Point<DIM>& pointOne,
 	const Point<DIM>& pointTwo)
 {
@@ -36,17 +39,30 @@ compare(
 	}
 }
 
+bool
+GeometryOps_2::
+compareIntersection(
+	const Point<DIM>& pointOne,
+	const Point<DIM>& pointTwo)
+{
+	if (pointOne.y() > pointTwo.y()) {
+		return true;
+	}
+	else if ((pointOne.y() == pointTwo.y()) && (pointOne.x() <= pointTwo.x())) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 std::vector<Point<2> >
 GeometryOps_2::
 convexHull(
 	std::vector<Point<DIM> >& unsortedPoints)
 {
 	// Sort points by x location
-	std::sort(unsortedPoints.begin(), unsortedPoints.end(), GeometryOps_2::compare);
-	// std::cout << "Sorted: " << std::endl;
-	// for (auto iter = unsortedPoints.begin(); iter != unsortedPoints.end(); ++iter) {
-	// 	std::cout << iter->x() << ", " << iter->y() << std::endl;
-	// }
+	std::sort(unsortedPoints.begin(), unsortedPoints.end(), GeometryOps_2::compareHull);
 
 	// Generate Upper Hull
 	std::vector<Point<DIM> > upperHull;
@@ -57,17 +73,10 @@ convexHull(
 	Vector<DIM> prevVector = prevPoint - upperHull[0];
 	Vector<DIM> newVector;
 	for (auto iter = unsortedPoints.begin() + 2; iter != unsortedPoints.end(); ++iter) {
-		// std::cout << "Upper Hull:" << std::endl;
-		// for (auto iter = upperHull.begin(); iter != upperHull.end(); ++iter) {
-		// 	std::cout << iter->x() << ", " << iter->y() << std::endl;
-		// }	
 		upperHull.push_back(*iter);
 		newPoint = *iter;
 		newVector = newPoint - prevPoint;
-		// std::cout << "New Point: " << newPoint.x() << ", " << newPoint.y() << std::endl;
-		// std::cout << "Cross Product: " << prevVector.cross(newVector) << std::endl;
 		while (prevVector.cross(newVector) >= 0 && upperHull.size() > 2) {
-			// std::cout << "Erased Point: " << prevPoint.x() << ", " << prevPoint.y() << std::endl; 
 			upperHull.erase(upperHull.end() - 2);
 			prevPoint = *(upperHull.rbegin() + 1);
 			prevVector = prevPoint - *(upperHull.rbegin() + 2);
@@ -77,11 +86,6 @@ convexHull(
 		prevPoint = newPoint;
 	}
 	upperHull.erase(upperHull.end() - 1);
-
-	// std::cout << "Upper Hull:" << std::endl;
-	// for (auto iter = upperHull.begin(); iter != upperHull.end(); ++iter) {
-	// 	std::cout << iter->x() << ", " << iter->y() << std::endl;
-	// }
 
 	// // Generate Lower Hull
 	std::vector<Point<DIM> > lowerHull;
@@ -95,45 +99,49 @@ convexHull(
 		newPoint = *iter;
 		newVector = newPoint - prevPoint;
 
-		// std::cout << "Lower Hull:" << std::endl;
-		// for (auto iter = lowerHull.begin(); iter != lowerHull.end(); ++iter) {
-		// 	std::cout << iter->x() << ", " << iter->y() << std::endl;
-		// }
-		// std::cout << "New Point: " << newPoint.x() << ", " << newPoint.y() << std::endl;
-		// std::cout << "Cross Product: " << prevVector.cross(newVector) << std::endl;
 		while (prevVector.cross(newVector) >= 0 && lowerHull.size() > 2) {
-			// std::cout << "Erased Point: " << prevPoint.x() << ", " << prevPoint.y() << std::endl; 
 			lowerHull.erase(lowerHull.end() - 2);
-			// std::cout << "Size: " << lowerHull.size() << std::endl;
 			
 			prevPoint = *(lowerHull.rbegin() + 1);
-			// std::cout << "Prev Point: " << prevPoint.x() << ", " << prevPoint.y() << std::endl; 
 			prevVector = prevPoint - *(lowerHull.rbegin() + 2);
 			newVector = newPoint - prevPoint;
-			// std::cout << "Prev Vector: " << prevVector.x() << ", " << prevVector.y() << std::endl;
-			// std::cout << "New Vector:  " << newVector.x() << ", " << newVector.y() << std::endl;
-			// std::cout << "Cross Product: " << prevVector.cross(newVector) << std::endl;
 		}
 		prevVector = newPoint - prevPoint;
 		prevPoint = newPoint;		
 	}
 	lowerHull.erase(lowerHull.end() - 1);
 
-	// std::cout << "Lower Hull:" << std::endl;
-	// for (auto iter = lowerHull.begin(); iter != lowerHull.end(); ++iter) {
-	// 	std::cout << iter->x() << ", " << iter->y() << std::endl;
-	// }
-
 	// join two halves of convex hull
 	for (auto iter = lowerHull.begin(); iter != lowerHull.end(); ++iter) {
 		upperHull.push_back(*iter);
 	}
 
-	// std::cout << "Upper Hull:" << std::endl;
-	// for (auto iter = upperHull.begin(); iter != upperHull.end(); ++iter) {
-	// 	std::cout << iter->x() << ", " << iter->y() << std::endl;
-	// }
-
 	// return full convex hull
 	return upperHull;
+}
+
+// std::vector<Point<2> >
+// GeometryOps_2::
+// findIntersections(
+// 		std::vector<LineSegment<DIM> > segments)
+// {
+// 	std::set<std::pair<Point<DIM>, LineSegment<DIM> >, compareIntersection> events;
+// 	// for (auto iter = segments.begin(); iter != segments.end(); ++iter) {
+// 	// 	Point<DIM> pointOne = iter->startPoint();
+// 	// 	Point<DIM> pointTwo = iter->endPoint();
+// 	// 	if (compareIntersection(pointOne, pointTwo)) {
+// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointOne, *iter));
+// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointTwo));
+// 	// 	}
+// 	// 	else {
+// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointTwo, *iter));
+// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointOne));
+// 	// 	}
+// 	// }
+
+// 	std::vector<Point<DIM> > intersections;
+	
+// 	return intersections;
+// }
+
 }
