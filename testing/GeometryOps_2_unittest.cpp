@@ -7,6 +7,7 @@ Data: 31/03/16
 #include "../algo/GeometryOps_2.h"
 #include "../data/Vector.h"
 #include "../data/Point.h"
+#include "../data/LineSegment.h"
 
 namespace compGeom {
 
@@ -149,6 +150,28 @@ TEST_F(GeometryOps_2Test, convexHullSegmentsPointsAtSameLocation)
 		EXPECT_EQ(hullExpected[i].x(), hullReturned[i].x());
 		EXPECT_EQ(hullExpected[i].y(), hullReturned[i].y());
 	}	
+}
+
+TEST_F(GeometryOps_2Test, findIntersectionEvents)
+{
+	std::vector<LineSegment<2> > lines;
+
+	lines.push_back(LineSegment<2>(Point<2>(1.0, 2.0), Point<2>(1.0, 4.0)));
+	lines.push_back(LineSegment<2>(Point<2>(2.0, 3.0), Point<2>(4.0, 3.0)));
+	lines.push_back(LineSegment<2>(Point<2>(1.0, 1.0), Point<2>(3.0, 3.0)));
+	lines.push_back(LineSegment<2>(Point<2>(0.0, 5.0), Point<2>(-3.0, 4.0)));
+
+	std::vector<std::pair<Point<DIM>, boost::optional<LineSegment<DIM> > > > events = 
+												GeometryOps_2::findIntersectionEvents(lines);
+	EXPECT_TRUE(events.size() == 8);
+	EXPECT_FALSE(!!(events[0].second));
+	EXPECT_TRUE(!!(events[1].second));
+	EXPECT_TRUE(!!(events[2].second));
+	EXPECT_FALSE(!!(events[3].second));
+	EXPECT_FALSE(!!(events[4].second));
+	EXPECT_TRUE(!!(events[5].second));
+	EXPECT_TRUE(!!(events[6].second));
+	EXPECT_FALSE(!!(events[7].second));
 }
 
 } // namespace compGeom
