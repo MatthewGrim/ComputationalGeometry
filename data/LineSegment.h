@@ -40,4 +40,16 @@ private:
 	std::pair<Point<DIM>, Point<DIM> > mEndPoints;
 };
 
+template<int DIM>
+class LineSegmentLessThan :
+    public std::binary_function<LineSegment<DIM>, LineSegment<DIM>, bool>
+{
+	bool operator() (
+		const LineSegment<DIM>& lhs,
+		const LineSegment<DIM>& rhs) const
+	{
+		return !(lhs == rhs) && (lhs < rhs);
+	}
+};
+
 }

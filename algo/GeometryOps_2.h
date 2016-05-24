@@ -8,6 +8,7 @@ data structures
 #pragma once
 
 #include <vector>
+#include <boost/optional.hpp>
 
 #include "../data/Vector_fwd.h"
 #include "../data/Point_fwd.h"
@@ -53,10 +54,10 @@ public:
 		std::vector<Point<DIM> >& unsortedPoints);
 
 	// Find the intersection of a set of lines
-	// static
-	// std::vector<Point<DIM> >
-	// findIntersections(
-	// 	std::vector<LineSegment<DIM> > segments);
+	static
+	std::vector<std::pair<Point<DIM>, boost::optional<LineSegment<DIM> > > >
+	findIntersectionEvents(
+		std::vector<LineSegment<DIM> > segments);
 
 };
 

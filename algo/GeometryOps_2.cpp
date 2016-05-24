@@ -10,6 +10,7 @@ Data: 31/03/16
 #include <iostream>
 #include <vector>
 #include <set>
+#include <boost/optional.hpp>
 
 namespace compGeom {
 
@@ -120,28 +121,26 @@ convexHull(
 	return upperHull;
 }
 
-// std::vector<Point<2> >
-// GeometryOps_2::
-// findIntersections(
-// 		std::vector<LineSegment<DIM> > segments)
-// {
-// 	std::set<std::pair<Point<DIM>, LineSegment<DIM> >, compareIntersection> events;
-// 	// for (auto iter = segments.begin(); iter != segments.end(); ++iter) {
-// 	// 	Point<DIM> pointOne = iter->startPoint();
-// 	// 	Point<DIM> pointTwo = iter->endPoint();
-// 	// 	if (compareIntersection(pointOne, pointTwo)) {
-// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointOne, *iter));
-// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointTwo));
-// 	// 	}
-// 	// 	else {
-// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointTwo, *iter));
-// 	// 		events.insert(std::pair<Point<DIM>, LineSegment<DIM> >(pointOne));
-// 	// 	}
-// 	// }
-
-// 	std::vector<Point<DIM> > intersections;
+std::vector<std::pair<Point<2>, boost::optional<LineSegment<2> > > >
+GeometryOps_2::
+findIntersectionEvents(
+		std::vector<LineSegment<DIM> > segments)
+{
+	std::vector<std::pair<Point<DIM>, boost::optional<LineSegment<DIM> > > > events;
+	for (auto iter = segments.begin(); iter != segments.end(); ++iter) {
+		Point<DIM> pointOne = iter->startPoint();
+		Point<DIM> pointTwo = iter->endPoint();
+		if (compareIntersection(pointOne, pointTwo)) {
+			events.push_back(std::pair<Point<DIM>, boost::optional<LineSegment<DIM> > >(pointOne, *iter));
+			events.push_back(std::pair<Point<DIM>, boost::optional<LineSegment<DIM> > >(pointTwo, boost::optional<LineSegment<DIM> >()));
+		}
+		else {
+			events.push_back(std::pair<Point<DIM>, boost::optional<LineSegment<DIM> > >(pointOne, boost::optional<LineSegment<DIM> >()));
+			events.push_back(std::pair<Point<DIM>, boost::optional<LineSegment<DIM> > >(pointTwo, *iter));
+		}
+	}
 	
-// 	return intersections;
-// }
+	return events;
+}
 
 }
